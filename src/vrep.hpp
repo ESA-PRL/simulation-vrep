@@ -38,6 +38,9 @@ namespace vrep
         void setPosition(int objectHandle, float * position);
         void setOrientation(int objectHandle, float * orientation);
         bool getToggleButtonState(string uiName, int uiButtonID);
+
+	void enableControlLoop(int jointHandle);
+	void disableControlLoop(int jointHandle);
     };
 }
 

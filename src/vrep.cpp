@@ -166,3 +166,14 @@ bool VREP::getToggleButtonState(string uiName, int uiButtonID)
     }
     return false;
 }
+
+void VREP::enableControlLoop(int jointHandle)
+{
+    simxSetObjectIntParameter(clientID, jointHandle,sim_jointintparam_ctrl_enabled,1,simx_opmode_oneshot);
+}
+
+void VREP::disableControlLoop(int jointHandle)
+{
+    simxSetObjectIntParameter(clientID, jointHandle,sim_jointintparam_ctrl_enabled,0,simx_opmode_oneshot);
+}
+
