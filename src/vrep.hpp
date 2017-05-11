@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -41,6 +42,8 @@ namespace vrep
 
 	void enableControlLoop(int jointHandle);
 	void disableControlLoop(int jointHandle);
+
+        void appendStringSignal(const char* signalname, std::vector<float> matrixData);
     };
 }
 

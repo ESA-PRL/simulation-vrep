@@ -177,3 +177,7 @@ void VREP::disableControlLoop(int jointHandle)
     simxSetObjectIntParameter(clientID, jointHandle,sim_jointintparam_ctrl_enabled,0,simx_opmode_oneshot);
 }
 
+void VREP::appendStringSignal(const char* signalname, std::vector<float> matrixData)
+{
+    simxAppendStringSignal(clientID, signalname, (const unsigned char*)&matrixData[0], matrixData.size()*4, simx_opmode_oneshot);
+}
