@@ -74,6 +74,11 @@ void VREP::setJointPosition(string jointName, float targetPosition)
     }
 }
 
+void VREP::initJointPositionStreaming(int jointHandle, float * currentPosition)
+{
+    simxGetJointPosition(clientID, jointHandle, currentPosition, simx_opmode_streaming);
+}
+
 void VREP::getJointPosition(int jointHandle, float * currentPosition)
 {
     simxGetJointPosition(clientID, jointHandle, currentPosition, simx_opmode_streaming);
@@ -96,6 +101,11 @@ void VREP::getJointPosition(string jointName, float * currentPosition)
     }
 }
 
+void VREP::initJointVelocityStreaming(int jointHandle, float * currentVelocity)
+{
+    simxGetObjectFloatParameter(clientID, jointHandle, 2012, currentVelocity, simx_opmode_streaming);
+}
+
 void VREP::getJointVelocity(int jointHandle, float * currentVelocity)
 {
     simxGetObjectFloatParameter(clientID, jointHandle, 2012, currentVelocity, simx_opmode_streaming);
@@ -111,6 +121,24 @@ void VREP::getJointVelocity(string jointName, float * currentVelocity)
     }
 }
 
+void VREP::initPositionStreaming(string objectName, string objectNameRelative, float * position)
+{
+    int objectHandle = -1;
+    int objectHandleRelative = -1;
+    getObjectHandle(objectName, &objectHandle);
+    getObjectHandle(objectNameRelative, &objectHandleRelative);
+    // Relative can be -1 to get absolute position
+    if(objectHandle != -1)
+    {
+        simxGetObjectPosition(clientID, objectHandle, objectHandleRelative, position, simx_opmode_streaming);
+    }
+}
+
+void VREP::getPosition(int objectHandle, int objectHandleRelative, float * position)
+{
+    simxGetObjectPosition(clientID, objectHandle, objectHandleRelative, position, simx_opmode_streaming);
+}
+
 void VREP::getPosition(string objectName, string objectNameRelative, float * position)
 {
     int objectHandle = -1;
@@ -124,7 +152,7 @@ void VREP::getPosition(string objectName, string objectNameRelative, float * pos
     }
 }
 
-void VREP::getOrientation(string objectName, string objectNameRelative, float * orientation)
+void VREP::initOrientationStreaming(string objectName, string objectNameRelative, float * orientation)
 {
     int objectHandle = -1;
     int objectHandleRelative = -1;
@@ -134,6 +162,24 @@ void VREP::getOrientation(string objectName, string objectNameRelative, float * 
     if(objectHandle != -1)
     {
         simxGetObjectOrientation(clientID, objectHandle, objectHandleRelative, orientation, simx_opmode_streaming);
+    }
+}
+
+void VREP::getOrientation(int objectHandle, int objectHandleRelative, float * orientation)
+{
+    simxGetObjectOrientation(clientID, objectHandle, objectHandleRelative, orientation, simx_opmode_streaming);
+}
+
+void VREP::getOrientation(string objectName, string objectNameRelative, float * orientation)
+{
+    int objectHandle = -1;
+    int objectHandleRelative = -1;
+    getObjectHandle(objectName, &objectHandle);
+    getObjectHandle(objectNameRelative, &objectHandleRelative);
+    // Relative can be -1 to get absolute orientation
+    if(objectHandle != -1)
+    {
+        simxGetObjectOrientation(clientID, objectHandle, objectHandleRelative, orientation, simx_opmode_buffer);
     }
 }
 
@@ -180,4 +226,32 @@ void VREP::disableControlLoop(int jointHandle)
 void VREP::appendStringSignal(const char* signalname, std::vector<float> matrixData)
 {
     simxAppendStringSignal(clientID, signalname, (const unsigned char*)&matrixData[0], matrixData.size()*4, simx_opmode_oneshot);
+}
+
+void VREP::enableSynchronization()
+{
+    simxSynchronous(clientID, true);
+}
+
+
+void VREP::syncTrigger()
+{
+    simxSynchronousTrigger(clientID);
+}
+
+void VREP::getPingTime(int& pingTime)
+{
+    simxGetPingTime(clientID, &pingTime);
+}
+
+void VREP::getQuaternion(double& w, double& x, double& y, double& z)
+{
+    double* stringSignal;
+    int size = 4;
+
+    simxGetStringSignal(clientID, "roverHeading", (simxUChar**)&stringSignal, &size, simx_opmode_streaming);
+    w = stringSignal[3];
+    x = stringSignal[0];
+    y = stringSignal[1];
+    z = stringSignal[2];
 }
