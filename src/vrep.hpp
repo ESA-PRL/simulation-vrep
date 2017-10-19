@@ -56,6 +56,8 @@ namespace vrep
         void getPingTime(int& pingTime);
 
         void getQuaternion(double& w, double& x, double& y, double& z);
+
+        int getSimulationTime();
     };
 }
 

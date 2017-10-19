@@ -255,3 +255,8 @@ void VREP::getQuaternion(double& w, double& x, double& y, double& z)
     y = stringSignal[1];
     z = stringSignal[2];
 }
+
+int VREP::getSimulationTime()
+{
+    return simxGetLastCmdTime(clientID);
+}
