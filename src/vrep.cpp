@@ -225,6 +225,7 @@ void VREP::disableControlLoop(int jointHandle)
 
 void VREP::appendStringSignal(const char* signalname, std::vector<float> matrixData)
 {
+    simxClearStringSignal(clientID, signalname, simx_opmode_oneshot);
     simxAppendStringSignal(clientID, signalname, (const unsigned char*)&matrixData[0], matrixData.size()*4, simx_opmode_oneshot);
 }
 
