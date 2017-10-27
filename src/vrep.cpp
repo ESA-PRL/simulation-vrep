@@ -247,14 +247,18 @@ void VREP::getPingTime(int& pingTime)
 
 void VREP::getQuaternion(double& w, double& x, double& y, double& z)
 {
-    double* stringSignal;
-    int size = 4;
+    double* signalValue = NULL;
+    int signalLength = 4;
 
-    simxGetStringSignal(clientID, "roverHeading", (simxUChar**)&stringSignal, &size, simx_opmode_streaming);
-    w = stringSignal[3];
-    x = stringSignal[0];
-    y = stringSignal[1];
-    z = stringSignal[2];
+    simxGetStringSignal(clientID, "roverHeading", (simxUChar**)&signalValue, (simxInt*)&signalLength, simx_opmode_streaming);
+
+    if (signalValue)
+    {
+        w = signalValue[3];
+        x = signalValue[0];
+        y = signalValue[1];
+        z = signalValue[2];
+    }
 }
 
 int VREP::getSimulationTime()
