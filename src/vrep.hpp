@@ -58,6 +58,8 @@ namespace vrep
         void getQuaternion(double& w, double& x, double& y, double& z);
 
         int getSimulationTime();
+
+        bool getStereoSensorImage(int sensorHandle, int* resolution, std::vector<uint8_t>& imageBuffer, bool blackAndWhite);
     };
 }
 

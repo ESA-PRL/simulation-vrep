@@ -34,6 +34,32 @@ int VREP::getObjectNumber()
     return -1;
 }
 
+bool VREP::getStereoSensorImage(int sensorHandle, int* res, std::vector<uint8_t>& image, bool blackAndWhite)
+{
+    uint8_t options = 0;
+    if (blackAndWhite)
+        options |= 1;
+    uint8_t* img;
+
+    int ret = simxGetVisionSensorImage(clientID, sensorHandle, res, &img, options, simx_opmode_oneshot);
+
+    if (ret == simx_return_ok)
+    {
+        for (int i = 0; i < res[0]; i++)
+        {
+            for (int j = res[1]-1; j >= 0; j--)
+            {
+                image.push_back(img[(res[0]-1-i)*res[1]+res[0]-1-j]);
+            }
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void VREP::sendStatusMessage(string message)
 {
     simxAddStatusbarMessage(clientID, message.c_str(), simx_opmode_oneshot);
