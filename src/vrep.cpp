@@ -9,12 +9,17 @@ extern "C"
 
 VREP::VREP()
 {
-    clientID = simxStart((simxChar*)"127.0.0.1", 19999, true, true, 2000, 5);
+}
+
+int VREP::startConnection(int port)
+{
+    clientID = simxStart((simxChar*)"127.0.0.1", port, true, true, 2000, 5);
+    return clientID;
 }
 
 int VREP::getClientId()
 {
-  return clientID;
+    return clientID;
 }
 
 int VREP::getObjectNumber()

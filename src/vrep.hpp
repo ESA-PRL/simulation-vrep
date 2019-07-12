@@ -17,6 +17,7 @@ namespace vrep
         int clientID;
     public:
         VREP();
+        int startConnection(int port);
         int getClientId();
         int getObjectNumber();
         void sendStatusMessage(string message);
